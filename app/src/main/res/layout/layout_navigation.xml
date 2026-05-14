@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_nav"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/primary_green"
+    android:orientation="horizontal"
+    android:weightSum="5">
+
+    <!-- Menu Lokasi -->
+    <LinearLayout android:id="@+id/nav_lokasi"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+            android:src="@android:drawable/ic_dialog_map" app:tint="@color/white" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Lokasi" android:textColor="@color/white" android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Menu Tracking -->
+    <LinearLayout android:id="@+id/nav_tracking"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_directions" app:tint="@color/white" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Tracking" android:textColor="@color/white" android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Menu Edukasi -->
+    <LinearLayout android:id="@+id/nav_edukasi"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_info_details" app:tint="@color/white" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Edukasi" android:textColor="@color/white" android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Menu Harga -->
+    <LinearLayout android:id="@+id/nav_harga"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_save" app:tint="@color/white" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Harga" android:textColor="@color/white" android:textSize="10sp" />
+    </LinearLayout>
+
+    <!-- Menu Estimasi -->
+    <LinearLayout android:id="@+id/nav_estimasi"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_manage" app:tint="@color/white" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Estimasi" android:textColor="@color/white" android:textSize="10sp" />
+    </LinearLayout>
+</LinearLayout>
