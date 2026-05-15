@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray">
+    android:background="@color/background_gray"
+    android:fitsSystemWindows="true">
 
     <View android:id="@+id/header_bg"
         android:layout_width="match_parent"
@@ -20,15 +21,26 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_nav"
-        android:layout_below="@id/header_bg" />
-
     <include
         android:id="@+id/bottom_nav"
-        layout="@layout/layout_navigation" />
+        layout="@layout/layout_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_nav"
+        android:layout_below="@id/header_bg"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </ScrollView>
 
 </RelativeLayout>
