@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "852422973693",
+    "project_id": "banksampahdigital-498b9",
+    "storage_bucket": "banksampahdigital-498b9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852422973693:android:925f4756ed711b3d8fc694",
+        "android_client_info": {
+          "package_name": "com.example.banksampahdigital"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8Rhsvg9Jr-Gyof-yxXHX6fCkfew5KUwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
