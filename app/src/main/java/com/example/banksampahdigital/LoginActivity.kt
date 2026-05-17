@@ -52,7 +52,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Error koneksi: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
-        
+
         tvSignUp.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
