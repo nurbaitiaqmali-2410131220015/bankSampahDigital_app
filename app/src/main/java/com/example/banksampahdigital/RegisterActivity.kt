@@ -16,34 +16,47 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val etNameRegister = findViewById<EditText>(R.id.etNameRegister)
-        val etEmailRegister = findViewById<EditText>(R.id.etEmailRegister)
-        val etPasswordRegister = findViewById<EditText>(R.id.etPasswordRegister)
+        // SINKRONISASI ID: Di XML kamu menggunakan etName, bukan etNama
+        val etNama = findViewById<EditText>(R.id.etName)
+        val etEmail = findViewById<EditText>(R.id.etEmail)
+        val etPassword = findViewById<EditText>(R.id.etPassword)
         val etConfirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
         val tvLoginLink = findViewById<TextView>(R.id.tvLoginLink)
 
         btnRegister.setOnClickListener {
-            val nama = etNameRegister.text.toString().trim()
-            val email = etEmailRegister.text.toString().trim()
-            val password = etPasswordRegister.text.toString().trim()
+            val nama = etNama.text.toString().trim()
+            val email = etEmail.text.toString().trim()
+            val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            if (nama.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            // Validasi kelengkapan input
+            if (nama.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Semua kolom wajib diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Validasi tambahan: Memastikan password dan konfirmasi password sama
+            if (password != confirmPassword) {
+                Toast.makeText(this, "Password dan Konfirmasi Password tidak cocok!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Membuat HashMap data pengguna
             val userMap = hashMapOf(
                 "nama" to nama,
                 "email" to email,
                 "password" to password
             )
 
-            db.collection("users").document(email)
-                .set(userMap)
+            // Menyimpan data ke Cloud Firestore dalam koleksi "users"
+            db.collection("users").document(email).set(userMap)
                 .addOnSuccessListener {
-                    Toast.makeText(this, "Akun berhasil dibuat! Silakan Login", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
+
+                    // Otomatis diarahkan kembali ke halaman LoginActivity
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
                     finish()
                 }
                 .addOnFailureListener { e ->
@@ -51,7 +64,10 @@ class RegisterActivity : AppCompatActivity() {
                 }
         }
 
+        // Aksi ketika teks "Login" diklik untuk kembali ke halaman login
         tvLoginLink.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
             finish()
         }
     }
