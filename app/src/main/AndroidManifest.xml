@@ -26,7 +26,16 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".DashboardPengangkutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DashboardWargaActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DetailPenjemputanActivity"
             android:exported="false" />
     </application>
 
