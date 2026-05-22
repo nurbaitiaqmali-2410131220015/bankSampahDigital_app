@@ -23,7 +23,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_dialog_map"
+            android:src="@drawable/ic_tracking"
             app:tint="@color/white" />
         <TextView
             android:layout_width="wrap_content"
@@ -45,7 +45,8 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_info_details" app:tint="@color/white" />
+            android:src="@drawable/ic_edukasi"
+            app:tint="@color/white" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,7 +67,8 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@android:drawable/ic_menu_manage" app:tint="@color/white" />
+            android:src="@drawable/ic_estimasi"
+            app:tint="@color/white" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
