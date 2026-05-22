@@ -22,36 +22,26 @@ class MainActivity : AppCompatActivity() {
         // 1. Inisialisasi Judul Header
         tvHeaderTitle = findViewById(R.id.tv_header_title)
 
-// 2. Ambil view dari tag <include android:id="@+id/bottom_nav" ... />
+        // 2. Ambil view dari tag <include android:id="@+id/bottom_nav" ... />
         val bottomNavLayout = findViewById<LinearLayout>(R.id.bottom_nav)
 
-// 3. Ambil ID menu di dalam layout include tersebut secara spesifik
+        // 3. Ambil ID menu di dalam layout include tersebut secara spesifik
         val navLokasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_lokasi)
-        val navTracking = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_tracking)
         val navEdukasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_edukasi)
-        val navHarga = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_harga)
         val navEstimasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_estimasi)
         // Munculkan LokasiFragment pertama kali saat aplikasi dibuka
         if (savedInstanceState == null) {
-            moveFragment(LokasiFragment(), "Lokasi")
+            moveFragment(LokasiFragment(), "Tracking")
         }
 
         // --- LOGIKA KLIK BOTTOM NAVIGATION BAR ---
 
         navLokasi.setOnClickListener {
-            moveFragment(LokasiFragment(), "Lokasi")
-        }
-
-        navTracking.setOnClickListener {
-            moveFragment(TrackingFragment(), "Tracking")
+            moveFragment(LokasiFragment(), "Tracking")
         }
 
         navEdukasi.setOnClickListener {
             moveFragment(EdukasiFragment(), "Edukasi")
-        }
-
-        navHarga.setOnClickListener {
-            moveFragment(HargaFragment(), "Harga")
         }
 
         navEstimasi.setOnClickListener {
@@ -68,9 +58,6 @@ class MainActivity : AppCompatActivity() {
         tvHeaderTitle.text = title
 
         supportFragmentManager.beginTransaction()
-            // BARIS ANIMASI DIBAWAH INI DIHAPUS/DI-KOMENTAR:
-            // .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
