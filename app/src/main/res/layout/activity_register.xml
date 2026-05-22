@@ -99,8 +99,40 @@
             android:hint="Ulangi password"
             android:inputType="textPassword"
             android:paddingStart="15dp"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="20dp"/> <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Daftar Sebagai"
+        android:textColor="#333333"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
 
+        <RadioGroup
+            android:id="@+id/rgRoleRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="30dp"
+            android:checkedButton="@id/rbWarga">
+
+            <RadioButton
+                android:id="@+id/rbWarga"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Warga (Setor)"
+                android:textSize="15sp"
+                android:textColor="#333333"
+                android:buttonTint="#2ECC71"/> <RadioButton
+            android:id="@+id/rbPengangkut"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Pengangkut"
+            android:textSize="15sp"
+            android:textColor="#333333"
+            android:buttonTint="#2ECC71"/>
+        </RadioGroup>
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"

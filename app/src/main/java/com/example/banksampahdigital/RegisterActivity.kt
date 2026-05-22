@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,11 +18,15 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // SINKRONISASI ID: Di XML kamu menggunakan etName, bukan etNama
         val etNama = findViewById<EditText>(R.id.etName)
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val etConfirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
+
+        // TAMBAHAN: Inisialisasi komponen RadioGroup & RadioButton
+        val rgRoleRegister = findViewById<RadioGroup>(R.id.rgRoleRegister)
+        val rbWarga = findViewById<RadioButton>(R.id.rbWarga)
+
         val btnRegister = findViewById<Button>(R.id.btnRegister)
         val tvLoginLink = findViewById<TextView>(R.id.tvLoginLink)
 
@@ -42,11 +48,19 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Membuat HashMap data pengguna
+            // TAMBAHAN: Logika menentukan string role berdasarkan RadioButton yang dipilih
+            val roleSelected = if (rbWarga.isChecked) {
+                "warga"
+            } else {
+                "pengangkut"
+            }
+
+            // UPDATE: Memasukkan field "role" ke dalam HashMap data pengguna
             val userMap = hashMapOf(
                 "nama" to nama,
                 "email" to email,
-                "password" to password
+                "password" to password,
+                "role" to roleSelected // Data ini yang akan dibaca saat Login nanti
             )
 
             // Menyimpan data ke Cloud Firestore dalam koleksi "users"

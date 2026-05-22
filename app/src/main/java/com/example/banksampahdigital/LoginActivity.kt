@@ -1,5 +1,6 @@
 package com.example.banksampahdigital
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginActivity : AppCompatActivity() {
+    // Inisialisasi Firestore untuk mengambil data dari database
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,34 +27,60 @@ class LoginActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
+            // 1. Validasi input kosong
             if (email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Email dan Password tidak boleh kosong!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Email dan Password wajib diisi!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // 2. Mengambil data pengguna berdasarkan Email dari koleksi "users"
             db.collection("users").document(email).get()
                 .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
+                    if (document.exists()) {
+                        // Ambil data password asli dari database
                         val dbPassword = document.getString("password")
 
-                        if (dbPassword == password) {
+                        // 3. Cocokkan password yang diinput dengan yang ada di database
+                        if (password == dbPassword) {
+
+                            // =======================================================
+                            // BAGIAN BARU: MENYIMPAN EMAIL USER YANG LOGIN KE SESI HP
+                            // =======================================================
+                            val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                            val editor = sharedPreferences.edit()
+                            editor.putString("EMAIL_USER", email) // Menyimpan email untuk dipakai di halaman Dashboard
+                            editor.apply()
+                            // =======================================================
+
+                            // AMBIL DATA ROLE: warga atau pengangkut
+                            val role = document.getString("role")
+
                             Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
 
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
+                            // 4. LOGIKA PENGALIHAN OTOMATIS BERDASARKAN ROLE
+                            if (role == "pengangkut") {
+                                // Jika akunnya pengangkut, buka Dashboard Pengangkut
+                                val intent = Intent(this, DashboardPengangkutActivity::class.java)
+                                startActivity(intent)
+                            } else {
+                                // Jika akunnya warga (atau default), buka Dashboard Warga
+                                val intent = Intent(this, DashboardWargaActivity::class.java)
+                                startActivity(intent)
+                            }
+                            finish() // Menutup LoginActivity agar tidak bisa di-back kembali
                         } else {
-                            Toast.makeText(this, "Password Salah!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Password salah!", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(this, "Akun tidak ditemukan! Silakan daftar terlebih dahulu.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Akun tidak ditemukan! Silakan daftar dahulu.", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Error koneksi: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Error saat login: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
 
+        // Aksi menuju ke halaman RegisterActivity jika teks "Sign Up" diklik
         tvSignUp.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
