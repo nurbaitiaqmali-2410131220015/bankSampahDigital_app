@@ -29,9 +29,6 @@
             android:name=".DashboardPengangkutActivity"
             android:exported="false" />
         <activity
-            android:name=".DashboardWargaActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

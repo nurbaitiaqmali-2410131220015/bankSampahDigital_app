@@ -64,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(intent)
                             } else {
                                 // Jika akunnya warga (atau default), buka Dashboard Warga
-                                val intent = Intent(this, DashboardWargaActivity::class.java)
+                                val intent = Intent(this, DashboardWargaFragment::class.java)
                                 startActivity(intent)
                             }
                             finish() // Menutup LoginActivity agar tidak bisa di-back kembali

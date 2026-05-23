@@ -3,62 +3,60 @@ package com.example.banksampahdigital
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 
 class MainActivity : AppCompatActivity() {
 
-    // Deklarasi TextView untuk Judul Header dinamis
     private lateinit var tvHeaderTitle: TextView
+    private lateinit var viewPager: ViewPager2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Membuat tampilan penuh layar (smooth)
+        enableEdgeToEdge() // Tetap mempertahankan tampilan full screen smooth milikmu
         setContentView(R.layout.activity_main)
 
-        // Inisialisasi komponen view dari activity_main.xml
-        // 1. Inisialisasi Judul Header
+        // 1. Inisialisasi Judul Header dan ViewPager2
         tvHeaderTitle = findViewById(R.id.tv_header_title)
+        viewPager = findViewById(R.id.viewPager)
 
-        // 2. Ambil view dari tag <include android:id="@+id/bottom_nav" ... />
+        // Daftar judul halaman sesuai urutan index ViewPager2
+        val titles = arrayOf("Dashboard", "Tracking Lokasi", "Edukasi Sampah", "Estimasi Harga")
+
+        // 2. Set Adapter untuk ViewPager2
+        viewPager.adapter = ViewPagerAdapter(this)
+
+        // 3. Logika deteksi halaman (Swipe aktif CUMA di Dashboard)
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                tvHeaderTitle.text = titles[position]
+
+                // Hanya index 0 (Dashboard) yang isUserInputEnabled-nya TRUE (bisa di-swipe ke kanan)
+                // Begitu pindah ke index 1 (Tracking), otomatis jadi FALSE (terkunci)
+                viewPager.isUserInputEnabled = (position == 0)
+            }
+        })
+
+        // 4. Inisialisasi Layout Tombol Navigasi Bawah
         val bottomNavLayout = findViewById<LinearLayout>(R.id.bottom_nav)
-
-        // 3. Ambil ID menu di dalam layout include tersebut secara spesifik
         val navLokasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_lokasi)
         val navEdukasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_edukasi)
         val navEstimasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_estimasi)
-        // Munculkan LokasiFragment pertama kali saat aplikasi dibuka
-        if (savedInstanceState == null) {
-            moveFragment(LokasiFragment(), "Tracking")
-        }
 
-        // --- LOGIKA KLIK BOTTOM NAVIGATION BAR ---
-
+        // 5. --- LOGIKA KLIK BOTTOM NAVIGATION BAR ---
+        // Mengubah currentItem langsung memindahkan halaman ViewPager2 tanpa transaksi fragment manual lagi
         navLokasi.setOnClickListener {
-            moveFragment(LokasiFragment(), "Tracking")
+            viewPager.currentItem = 1 // Pindah ke Tracking
         }
 
         navEdukasi.setOnClickListener {
-            moveFragment(EdukasiFragment(), "Edukasi")
+            viewPager.currentItem = 2 // Pindah ke Edukasi
         }
 
         navEstimasi.setOnClickListener {
-            moveFragment(EstimasiFragment(), "Estimasi")
+            viewPager.currentItem = 3 // Pindah ke Estimasi
         }
-    }
-
-    /**
-     * Fungsi khusus untuk menukar fragment di bagian tengah layar (fragment_container)
-     * Dilengkapi dengan animasi memudar (fade) agar transisinya super smooth.
-     */
-    private fun moveFragment(fragment: Fragment, title: String) {
-        // Mengubah text judul di header sesuai halaman aktif
-        tvHeaderTitle.text = title
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
     }
 }
