@@ -57,14 +57,14 @@ class LoginActivity : AppCompatActivity() {
 
                             Toast.makeText(this, "Login Berhasil!", Toast.LENGTH_SHORT).show()
 
-                            // 4. LOGIKA PENGALIHAN OTOMATIS BERDASARKAN ROLE
+                            // LOGIKA PENGALIHAN YANG BENAR
                             if (role == "pengangkut") {
-                                // Jika akunnya pengangkut, buka Dashboard Pengangkut
+                                // Jika akunnya pengangkut, buka DashboardPengangkutActivity
                                 val intent = Intent(this, DashboardPengangkutActivity::class.java)
                                 startActivity(intent)
                             } else {
-                                // Jika akunnya warga (atau default), buka Dashboard Warga
-                                val intent = Intent(this, DashboardWargaFragment::class.java)
+                                // JIKA WARGA: Buka MainActivity! (Jangan panggil Fragment-nya langsung)
+                                val intent = Intent(this, MainActivity::class.java)
                                 startActivity(intent)
                             }
                             finish() // Menutup LoginActivity agar tidak bisa di-back kembali

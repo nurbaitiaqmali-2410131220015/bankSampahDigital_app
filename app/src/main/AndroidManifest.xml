@@ -34,6 +34,9 @@
         <activity
             android:name=".DetailPenjemputanActivity"
             android:exported="false" />
+        <activity
+            android:name=".DetailEdukasiActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.banksampahdigital
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,18 +62,14 @@ class EdukasiFragment : Fragment() {
 
     // FUNGSI BANTUAN: Biar tidak buat transaksi berulang-ulang sampai 8 kali
     private fun pindahKeDetail(idKategori: String, namaKategori: String) {
-        val fragmentDetail = DetailEdukasiFragment()
+        // Menggunakan Intent untuk membuka DetailEdukasiActivity
+        val intent = Intent(requireContext(), DetailEdukasiActivity::class.java)
 
-        // Memasukkan data ke dalam bundle (pengganti putExtra pada Intent)
-        val bundle = Bundle()
-        bundle.putString("EXTRA_ID_KATEGORI", idKategori)
-        bundle.putString("EXTRA_NAMA_KATEGORI", namaKategori)
-        fragmentDetail.arguments = bundle
+        // Titipkan data kategori ke dalam intent
+        intent.putExtra("EXTRA_ID_KATEGORI", idKategori)
+        intent.putExtra("EXTRA_NAMA_KATEGORI", namaKategori)
 
-        // Memulai transaksi menempelkan fragment baru
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragmentDetail) // Pastikan R.id.fragment_container ini sesuai dengan ID di activity_main.xml kamu
-            .addToBackStack(null) // Biar kalau ditekan tombol back di HP, kembali ke menu edukasi (tidak langsung keluar aplikasi)
-            .commit()
+        // Jalankan Activity
+        startActivity(intent)
     }
 }
