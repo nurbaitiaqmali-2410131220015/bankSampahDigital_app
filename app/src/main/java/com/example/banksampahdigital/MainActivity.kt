@@ -3,60 +3,84 @@ package com.example.banksampahdigital
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var tvHeaderTitle: TextView
     private lateinit var viewPager: ViewPager2
+    private lateinit var tvHeaderTitle: TextView
+
+    // Deklarasi variabel untuk tombol navigasi custom LinearLayout
+    private lateinit var btnDashboard: LinearLayout
+    private lateinit var btnTracking: LinearLayout
+    private lateinit var btnEdukasi: LinearLayout
+    private lateinit var btnEstimasi: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge() // Tetap mempertahankan tampilan full screen smooth milikmu
         setContentView(R.layout.activity_main)
 
-        // 1. Inisialisasi Judul Header dan ViewPager2
-        tvHeaderTitle = findViewById(R.id.tv_header_title)
+        // 1. Inisialisasi komponen View dari activity_main.xml
         viewPager = findViewById(R.id.viewPager)
+        tvHeaderTitle = findViewById(R.id.tv_header_title)
 
-        // Daftar judul halaman sesuai urutan index ViewPager2
-        val titles = arrayOf("Dashboard", "Tracking Lokasi", "Edukasi Sampah", "Estimasi Harga")
+        // 2. Inisialisasi komponen Tombol Menu dari layout_navigation.xml
+        btnDashboard = findViewById(R.id.nav_dashboard)
+        btnTracking = findViewById(R.id.nav_lokasi)
+        btnEdukasi = findViewById(R.id.nav_edukasi)
+        btnEstimasi = findViewById(R.id.nav_estimasi)
 
-        // 2. Set Adapter untuk ViewPager2
-        viewPager.adapter = ViewPagerAdapter(this)
+        // 3. Memasang adapter ViewPager2 (Menghubungkan ke fragment-fragment)
+        val adapter = ViewPagerAdapter(this)
+        viewPager.adapter = adapter
 
-        // 3. Logika deteksi halaman (Swipe aktif CUMA di Dashboard)
+        // 4. Kunci swipe manual agar Maps di LokasiFragment tidak konflik saat digeser
+        viewPager.isUserInputEnabled = false
+
+        // 5. Logika Event Klik Manual pada Tombol Menu Custom (LinearLayout)
+        btnDashboard.setOnClickListener {
+            viewPager.currentItem = 0
+            updateHeaderAndMenu(0)
+        }
+
+        btnTracking.setOnClickListener {
+            viewPager.currentItem = 1
+            updateHeaderAndMenu(1)
+        }
+
+        btnEdukasi.setOnClickListener {
+            viewPager.currentItem = 2
+            updateHeaderAndMenu(2)
+        }
+
+        btnEstimasi.setOnClickListener {
+            viewPager.currentItem = 3
+            updateHeaderAndMenu(3)
+        }
+
+        // 6. Sinkronisasi callback jika ada perubahan halaman pada ViewPager2
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                tvHeaderTitle.text = titles[position]
-
-                // Hanya index 0 (Dashboard) yang isUserInputEnabled-nya TRUE (bisa di-swipe ke kanan)
-                // Begitu pindah ke index 1 (Tracking), otomatis jadi FALSE (terkunci)
-                viewPager.isUserInputEnabled = (position == 0)
+                updateHeaderAndMenu(position)
             }
         })
 
-        // 4. Inisialisasi Layout Tombol Navigasi Bawah
-        val bottomNavLayout = findViewById<LinearLayout>(R.id.bottom_nav)
-        val navLokasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_lokasi)
-        val navEdukasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_edukasi)
-        val navEstimasi = bottomNavLayout.findViewById<LinearLayout>(R.id.nav_estimasi)
+        // Set tampilan awal saat aplikasi pertama kali dibuka (Default: Dashboard)
+        updateHeaderAndMenu(0)
+    }
 
-        // 5. --- LOGIKA KLIK BOTTOM NAVIGATION BAR ---
-        // Mengubah currentItem langsung memindahkan halaman ViewPager2 tanpa transaksi fragment manual lagi
-        navLokasi.setOnClickListener {
-            viewPager.currentItem = 1 // Pindah ke Tracking
-        }
-
-        navEdukasi.setOnClickListener {
-            viewPager.currentItem = 2 // Pindah ke Edukasi
-        }
-
-        navEstimasi.setOnClickListener {
-            viewPager.currentItem = 3 // Pindah ke Estimasi
+    /**
+     * Fungsi untuk mengubah teks Header Title secara dinamis
+     * sesuai dengan fragment halaman yang sedang aktif.
+     */
+    private fun updateHeaderAndMenu(position: Int) {
+        when (position) {
+            0 -> tvHeaderTitle.text = "Dashboard"
+            1 -> tvHeaderTitle.text = "Tracking Lokasi"
+            2 -> tvHeaderTitle.text = "Edukasi Sampah"
+            3 -> tvHeaderTitle.text = "Estimasi Harga"
         }
     }
 }
