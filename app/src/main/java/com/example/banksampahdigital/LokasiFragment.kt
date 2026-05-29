@@ -56,9 +56,13 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        // Fokus awal kamera mengarah ke daerah Banjarmasin sebelum dilacak
+
+        // TAMBAHAN: Mengubah jenis peta menjadi tipe Satelit/Hybrid agar mirip mockup
+        mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
+
+        // Fokus awal kamera mengarah ke daerah Banjarmasin
         val posisiBanjarmasin = LatLng(-3.316694, 114.590111)
-        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(posisiBanjarmasin, 11f))
+        mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(posisiBanjarmasin, 12.5f))
     }
 
     private fun mulaiPelacakanLokasi() {
