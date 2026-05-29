@@ -46,7 +46,7 @@ class DashboardWargaFragment : Fragment() {
 
         if (!emailLogin.isNullOrEmpty()) {
 
-            // 1. Ambil Nama untuk Sapaan Profil
+
             db.collection("users").document(emailLogin).get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
@@ -55,7 +55,6 @@ class DashboardWargaFragment : Fragment() {
                     }
                 }
 
-            // 2. Pasang Listener Snapshot untuk Mengupdate Saldo, Poin, DAN LIST RIWAYAT secara Real-Time
             db.collection("transaksi")
                 .whereEqualTo("emailWarga", emailLogin)
                 // UPDATE: Kita hapus filter status "selesai" di sini agar semua transaksi (baik "menunggu" maupun "selesai") ikut ditarik ke dalam list riwayat
