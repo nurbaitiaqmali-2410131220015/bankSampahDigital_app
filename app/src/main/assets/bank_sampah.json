@@ -1,0 +1,149 @@
+[
+  {
+    "nama": "Bank Sampah Induk",
+    "alamat": "Jl. Hksn, Alalak Utara, Kec. Banjarmasin Utara, Kota Banjarmasin, Kalimantan Selatan 70124",
+    "kota": "Banjarmasin",
+    "latitude": -3.2797553952119056,
+    "longitude": 114.57763036005606
+  },
+  {
+    "nama": "Bank Sampah Kunang Kunang",
+    "alamat": "Jalur II A No.42, Sungai Miai, Kec. Banjarmasin Utara, Kota Banjarmasin, Kalimantan Selatan 70123",
+    "kota": "Banjarmasin",
+    "latitude": -3.2950248054848412,
+    "longitude": 114.5970129777724
+  },
+  {
+    "nama": "Bank Sampah Kenanga - Komp.mahligai",
+    "alamat": "Jl. Sultan Adam, Sungai Jingah, Kec. Banjarmasin Utara, Kota Banjarmasin, Kalimantan Selatan 70122",
+    "kota": "Banjarmasin",
+    "latitude": -3.3064760662584294,
+    "longitude": 114.60548871317113
+  },
+  {
+    "nama": "Bank Sampah Tugu Benua Anyar",
+    "alamat": "Jl. Kol Soepirman No.36 Benua Anyar Kec. Banjarmasin Tim. Kota Banjarmasin, kelurahan 70236, Benua Anyar, Kec. Banjarmasin Tim., Kota Banjarmasin, Kalimantan Selatan 70236",
+    "kota": "Banjarmasin",
+    "latitude": -3.3131932238266018,
+    "longitude": 114.61084108453443
+  },
+  {
+    "nama": "Bank Sampah Lestari",
+    "alamat": "Jl. 9 Nopember, Benua Anyar, Kec. Banjarmasin Tim., Kota Banjarmasin, Kalimantan Selatan 70239",
+    "kota": "Banjarmasin",
+    "latitude": -3.313840502095927,
+    "longitude": 114.61279072458935
+  },
+  {
+    "nama": "Bank Sampah Mitra 19",
+    "alamat": "Komplek A Yani 1, Jl. Veteran No.01, Pengambangan, Kec. Banjarmasin Tim., Kota Banjarmasin, Kalimantan Selatan 70239",
+    "kota": "Banjarmasin",
+    "latitude": -3.3168697028079013,
+    "longitude": 114.61736044793764
+  },
+  {
+    "nama": "Bank sampah palui",
+    "alamat": "GG.pintu air, Jl. Karang Paci, Karang Mekar, Kec. Banjarmasin Tim., Kota Banjarmasin, Kalimantan Selatan 70237",
+    "kota": "Banjarmasin",
+    "latitude": -3.3304847082663116,
+    "longitude": 114.60967930641851
+  },
+  {
+    "nama": "Bank Sampah Morse Indah",
+    "alamat": "Jl. 09 Oktober Gg. Moroseneng No.59, RT.24/RW.02, Pekauman, Kec. Banjarmasin Sel., Kota Banjarmasin, Kalimantan Selatan 70234",
+    "kota": "Banjarmasin",
+    "latitude": -3.336102842044335,
+    "longitude": 114.59008455771395
+  },
+  {
+    "nama": "Bank Sampah Mahatama RT 23",
+    "alamat": "Komplek Graha Mahatama, Jl. Mangga VII No.147, RT.23/RW.02, Tj. Pagar, Kec. Banjarmasin Sel., Kota Banjarmasin, Kalimantan Selatan 70247",
+    "kota": "Banjarmasin",
+    "latitude": -3.3535820858830534,
+    "longitude": 114.59880823961421
+  },
+  {
+    "nama": "Bank Sampah Amat",
+    "alamat": "Jl. Gerilya No.Rt.02B, RW.No.45, Keramat, Kec. Sungai Tabuk, Kabupaten Banjar, Kalimantan Selatan 70653",
+    "kota": "Banjar",
+    "latitude": -3.3180792437882536,
+    "longitude": 114.70023693709184
+  },
+  {
+    "nama": "Bank Sampah Induk Liang Anggang (BSI LA)",
+    "alamat": "Jl. Golf Gg. Dewantara, Landasan Ulin Utara, Kec. Liang Anggang, Kota Banjar Baru, Kalimantan Selatan 70723",
+    "kota": "Banjarbaru",
+    "latitude": -3.4370609868066366,
+    "longitude": 114.73646098331689
+  },
+  {
+    "nama": "BANK SAMPAH PILAR",
+    "alamat": "Landasan Ulin Utara, Kec. Liang Anggang, Kota Banjar Baru, Kalimantan Selatan 70724",
+    "kota": "Banjarbaru",
+    "latitude": -3.4183981521459597,
+    "longitude": 114.74522486546813
+  },
+  {
+    "nama": "Bank Sampah Berkat Sehat",
+    "alamat": "Jl. Ahmad Yani Jurusan Pelaihari, Landasan Ulin Sel., Kec. Liang Anggang, Kota Banjar Baru, Kalimantan Selatan 70722",
+    "kota": "Banjarbaru",
+    "latitude": -3.4818938086880284,
+    "longitude": 114.70769611984558
+  },
+  {
+    "nama": "Bank Sampah Benawa Raya Mandiri",
+    "alamat": "Jl. Musdalifah, Guntungmanggis, Kec. Landasan Ulin, Kota Banjar Baru, Kalimantan Selatan 70721",
+    "kota": "Banjarbaru",
+    "latitude": -3.466408410720937,
+    "longitude": 114.78276593047362
+  },
+  {
+    "nama": "BANK SAMPAH KARYA MULYO",
+    "alamat": "Guntungmanggis, Kec. Landasan Ulin, Kota Banjar Baru, Kalimantan Selatan 70721",
+    "kota": "Banjarbaru",
+    "latitude": -3.455487636598725,
+    "longitude": 114.79527844345239
+  },
+  {
+    "nama": "Bank Sampah Mandiri",
+    "alamat": "Jl. Sungai Sumba No.33, Guntungmanggis, Kec. Landasan Ulin, Kota Banjar Baru, Kalimantan Selatan 70721",
+    "kota": "Banjarbaru",
+    "latitude": -3.454979169414619,
+    "longitude": 114.80053144780379
+  },
+  {
+    "nama": "Bank Sampah Jolali",
+    "alamat": "Jl. Kebun Karet Jl. Jolali No.52, Loktabat Utara, Kec. Landasan Ulin, Kota Banjar Baru, Kalimantan Selatan 70721",
+    "kota": "Banjarbaru",
+    "latitude": -3.440006516130211,
+    "longitude": 114.80401977287987
+  },
+  {
+    "nama": "Bank Sampah KAMI Mentaos",
+    "alamat": "Jl. Palapa I No.13, RT.02/RW.04, Mentaos, Kec. Banjarbaru Utara, Kota Banjar Baru, Kalimantan Selatan 70714",
+    "kota": "Banjarbaru",
+    "latitude": -3.4372208801281823,
+    "longitude": 114.83541470016854
+  },
+  {
+    "nama": "BANK SAMPAH KENANGA ASRI",
+    "alamat": "MURUNG KENANGA, Jl. Kenanga, RT.006/RW.003, Sungai Sipai, Kec. Martapura, Kabupaten Banjar, Kalimantan Selatan 70614",
+    "kota": "Banjar",
+    "latitude": -3.402747964798313,
+    "longitude": 114.85076333100847
+  },
+  {
+    "nama": "BANK SAMPAH SEKUMPUL",
+    "alamat": "Jl. Pendidikan Gg. Berkat Tawakal No.2, RT.006/RW.03, Kelurahan Sekumpul, Mentaos, Kec. Martapura, Kabupaten Banjar, Kalimantan Selatan 70614",
+    "kota": "Banjar",
+    "latitude": -3.4347834420412218,
+    "longitude": 114.85843764617582
+  },
+  {
+    "nama": "Bank Sampah TASAKu",
+    "alamat": "Komplek Cahaya Lambung Mangkurat Asri, Jl. H. Mistar Cokrokusumo No.8, Bangkal, Kec. Cemp., Kota Banjar Baru, Kalimantan Selatan 70732",
+    "kota": "Banjarbaru",
+    "latitude": -3.470647972088628,
+    "longitude": 114.85111216351608
+  }
+]

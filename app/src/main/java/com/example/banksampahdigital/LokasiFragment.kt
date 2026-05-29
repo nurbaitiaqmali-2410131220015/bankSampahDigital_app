@@ -106,74 +106,77 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun ambilBankSampahTerdekat(namaKota: String) {
-        // 1. Ambil lokasi GPS terakhir dari HP user untuk patokan mengukur jarak
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) return
 
         fusedLocationClient.lastLocation.addOnSuccessListener { userLocation: Location? ->
             if (userLocation == null) return@addOnSuccessListener
 
-            // Ambil koordinat HP saat ini
             val userLat = userLocation.latitude
             val userLng = userLocation.longitude
 
-            // 2. Tarik semua data dari Firestore untuk difilter berdasarkan jarak terdekat
-            db.collection("bank_sampah").get()
-                .addOnSuccessListener { querySnapshot ->
-                    mMap?.clear() // Bersihkan pin lama
+            try {
+                // 1. Membaca file JSON dari folder assets lokal
+                val inputStream = activity?.assets?.open("bank_sampah.json")
+                val size = inputStream?.available() ?: 0
+                val buffer = ByteArray(size)
+                inputStream?.read(buffer)
+                inputStream?.close()
 
-                    // Pasang kembali pin lokasi saya
-                    val koordinatSaya = LatLng(userLat, userLng)
-                    mMap?.addMarker(MarkerOptions().position(koordinatSaya).title("Lokasi Saya"))
+                val jsonString = String(buffer, Charsets.UTF_8)
+                val jsonArray = org.json.JSONArray(jsonString)
 
-                    var adaDataDekat = false
-                    val RADIUS_MAKSIMAL_KM = 10.0 // Hanya tampilkan yang jaraknya di bawah 10 KM
+                mMap?.clear() // Bersihkan pin lama di peta
 
-                    for (document in querySnapshot) {
-                        val nama = document.getString("nama") ?: "Bank Sampah"
-                        val alamat = document.getString("alamat") ?: ""
-                        val lat = document.getDouble("latitude")
-                        val lng = document.getDouble("longitude")
+                // Pasang tanda lokasi HP user saat ini
+                val koordinatSaya = LatLng(userLat, userLng)
+                mMap?.addMarker(MarkerOptions().position(koordinatSaya).title("Lokasi Saya"))
 
-                        if (lat != null && lng != null) {
-                            // 3. Hitung jarak antara HP user dengan posisi Bank Sampah
-                            val lokasiBank = Location("").apply {
-                                latitude = lat
-                                longitude = lng
-                            }
+                var adaDataDekat = false
+                val RADIUS_MAKSIMAL_KM = 10.0 // Menyaring bank sampah dalam radius maksimal 10 KM
 
-                            // userLocation.distanceTo mengembalikan satuan METER, kita bagi 1000 jadi KM
-                            val jarakKeBankKm = userLocation.distanceTo(lokasiBank) / 1000
+                // 2. Loop otomatis membaca ke-21 data bank sampah yang kamu buat tadi
+                for (i in 0 until jsonArray.length()) {
+                    val obj = jsonArray.getJSONObject(i)
+                    val nama = obj.getString("nama")
+                    val alamat = obj.getString("alamat")
+                    val lat = obj.getDouble("latitude")
+                    val lng = obj.getDouble("longitude")
 
-                            // 4. Filter: Jika jaraknya masuk radius (di bawah 10 KM), munculkan di peta!
-                            if (jarakKeBankKm <= RADIUS_MAKSIMAL_KM) {
-                                adaDataDekat = true
-                                val posisiBank = LatLng(lat, lng)
-
-                                // Format jarak menjadi 1 angka di belakang koma (misal: 2.5 KM)
-                                val jarakFormat = String.format(Locale.getDefault(), "%.1f KM", jarakKeBankKm)
-
-                                mMap?.addMarker(
-                                    MarkerOptions()
-                                        .position(posisiBank)
-                                        .title(nama)
-                                        .snippet("$alamat ($jarakFormat)")
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                                )
-                            }
-                        }
+                    // 3. Mengukur jarak antara titik GPS user dengan masing-masing Bank Sampah
+                    val lokasiBank = Location("").apply {
+                        latitude = lat
+                        longitude = lng
                     }
+                    val jarakKeBankKm = userLocation.distanceTo(lokasiBank) / 1000
 
-                    if (!adaDataDekat) {
-                        Toast.makeText(requireContext(), "Tidak ada Bank Sampah dalam radius $RADIUS_MAKSIMAL_KM KM.", Toast.LENGTH_SHORT).show()
+                    // 4. Jika jaraknya dekat (masuk radius 10 KM), langsung tancapkan pin hijau di peta
+                    if (jarakKeBankKm <= RADIUS_MAKSIMAL_KM) {
+                        adaDataDekat = true
+                        val posisiBank = LatLng(lat, lng)
+                        val jarakFormat = String.format(Locale.getDefault(), "%.1f KM", jarakKeBankKm)
+
+                        mMap?.addMarker(
+                            MarkerOptions()
+                                .position(posisiBank)
+                                .title(nama)
+                                .snippet("$alamat ($jarakFormat)")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        )
                     }
+                }
 
-                    // Fokuskan kamera ke lokasi user saat ini
-                    mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(koordinatSaya, 13f))
+                if (!adaDataDekat) {
+                    Toast.makeText(requireContext(), "Tidak ada Bank Sampah dalam radius $RADIUS_MAKSIMAL_KM KM di sekitar posisi Anda.", Toast.LENGTH_SHORT).show()
                 }
-                .addOnFailureListener { e ->
-                    Toast.makeText(requireContext(), "Gagal memuat database: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+
+                // Kamera peta fokus mengarah ke lokasi user
+                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(koordinatSaya, 13f))
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "Gagal memuat file database JSON: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
