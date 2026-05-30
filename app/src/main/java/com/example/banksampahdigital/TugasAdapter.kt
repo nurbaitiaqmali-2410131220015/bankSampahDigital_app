@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TugasAdapter(private val listTugas: List<TugasModel>) : // OPTIMALISASI: Mengubah ArrayList menjadi List biasa agar lebih ringan
-    RecyclerView.Adapter<TugasAdapter.TugasViewHolder>() {
+class TugasAdapter(
+    private val listTugas: List<TugasModel>,
+    private val onItemClick: (TugasModel) -> Unit
+) : RecyclerView.Adapter<TugasAdapter.TugasViewHolder>() {
 
     class TugasViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvNama: TextView = view.findViewById(R.id.itemNamaWarga)
@@ -26,15 +28,8 @@ class TugasAdapter(private val listTugas: List<TugasModel>) : // OPTIMALISASI: M
         holder.tvNama.text = data.namaWarga
         holder.tvAlamat.text = data.alamatWarga
 
-        // AKSI KLIK: Berpindah ke halaman Detail Penjemputan untuk Kurir
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, DetailPenjemputanActivity::class.java).apply {
-                putExtra("NAMA_WARGA", data.namaWarga)
-                putExtra("ALAMAT_WARGA", data.alamatWarga)
-                putExtra("DETAIL_SAMPAH", data.detailSampah)
-            }
-            context.startActivity(intent)
+            onItemClick(data)
         }
     }
 

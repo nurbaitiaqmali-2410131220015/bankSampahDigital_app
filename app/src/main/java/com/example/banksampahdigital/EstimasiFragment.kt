@@ -11,20 +11,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class EstimasiFragment : Fragment() {
 
-    // Inisialisasi basis data Firestore
     private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Hubungkan ke fragment_estimasi.xml
         val view = inflater.inflate(R.layout.fragment_estimasi, container, false)
 
-        // Hubungkan elemen UI berdasarkan ID yang baru kita tambahkan
         val etNamaSampah = view.findViewById<EditText>(R.id.etNamaSampah)
         val etJenisKategori = view.findViewById<EditText>(R.id.etJenisKategori)
         val etBeratSampah = view.findViewById<EditText>(R.id.etBeratSampah)
@@ -34,11 +34,9 @@ class EstimasiFragment : Fragment() {
         val btnHitung = view.findViewById<Button>(R.id.btnHitung)
         val btnSetorJemput = view.findViewById<Button>(R.id.btnSetorJemput)
 
-        // Konstanta tarif dasar per kilogram (Misal: Rp 3.000)
         val hargaPerKg = 3000
         var totalHargaKalkulasi = 0
 
-        // 1. Logika Klik Tombol "Hitung Total Harga"
         btnHitung.setOnClickListener {
             val beratStr = etBeratSampah.text.toString().trim()
 
@@ -47,23 +45,19 @@ class EstimasiFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Hitung matematika konversi harga
             val beratValue = beratStr.toInt()
             totalHargaKalkulasi = beratValue * hargaPerKg
 
-            // Ubah teks total harga di dalam CardView hasil
             tvTotalHargaEstimasi.text = "Rp. $totalHargaKalkulasi"
             Toast.makeText(context, "Total harga berhasil dihitung!", Toast.LENGTH_SHORT).show()
         }
 
-        // 2. Logika Klik Tombol "Setor Dan Jemput" (Kirim ke Firestore / CREATE)
         btnSetorJemput.setOnClickListener {
             val namaSampah = etNamaSampah.text.toString().trim()
             val jenisSampah = etJenisKategori.text.toString().trim()
             val beratStr = etBeratSampah.text.toString().trim()
             val namaBank = etNamaBankSampah.text.toString().trim()
 
-            // Validasi kelengkapan formulir sebelum dikirim ke database
             if (namaSampah.isEmpty() || jenisSampah.isEmpty() || beratStr.isEmpty() || namaBank.isEmpty()) {
                 Toast.makeText(context, "Mohon lengkapi seluruh kolom input!", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -74,36 +68,58 @@ class EstimasiFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Ambil session email warga yang login dari SharedPreferences
             val sharedPreferences = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-            val emailWarga = sharedPreferences.getString("EMAIL_USER", "Anonim")
+            val emailWarga = sharedPreferences.getString("EMAIL_USER", "")
 
-            // Menyusun objek data untuk diunggah ke Firebase
-            val transaksiMap = hashMapOf(
-                "emailWarga" to emailWarga,
-                "namaSampah" to namaSampah,
-                "jenisSampah" to jenisSampah,
-                "beratSampah" to beratStr.toDouble(),
-                "totalHarga" to totalHargaKalkulasi,
-                "bankSampahTujuan" to namaBank,
-                "status" to "menunggu" // Indikator antrean agar bisa terbaca di aplikasi kurir
-            )
+            if (emailWarga.isNullOrEmpty()) {
+                Toast.makeText(context, "Sesi pengguna tidak valid!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Mengirim data baru ke koleksi "transaksi" di Cloud Firestore
-            db.collection("transaksi").add(transaksiMap)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Transaksi penjemputan berhasil dibuat!", Toast.LENGTH_LONG).show()
+            db.collection("users").document(emailWarga).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val namaLengkapWarga = document.getString("nama") ?: "Warga Anonim"
+                        val alamatWarga = document.getString("alamat") ?: "Alamat tidak diisi"
 
-                    // Mengosongkan formulir setelah data berhasil disimpan
-                    etNamaSampah.text.clear()
-                    etJenisKategori.text.clear()
-                    etBeratSampah.text.clear()
-                    etNamaBankSampah.text.clear()
-                    tvTotalHargaEstimasi.text = "Rp. -"
-                    totalHargaKalkulasi = 0
+                        val sdf = SimpleDateFormat("dd MMMM yyyy", Locale("id", "ID"))
+                        val tanggalHariIni = sdf.format(Date())
+                        val estimasiPoin = totalHargaKalkulasi / 100
+
+                        val transaksiMap = hashMapOf(
+                            "emailWarga" to emailWarga,
+                            "namaWarga" to namaLengkapWarga,
+                            "alamatWarga" to alamatWarga,
+                            "namaSampah" to namaSampah,
+                            "jenisSampah" to jenisSampah,
+                            "beratSampah" to beratStr.toDouble(),
+                            "totalHarga" to totalHargaKalkulasi,
+                            "poin" to estimasiPoin,
+                            "bankSampahTujuan" to namaBank,
+                            "status" to "Menunggu Kurir",
+                            "tanggal" to tanggalHariIni
+                        )
+
+                        db.collection("transaksi").add(transaksiMap)
+                            .addOnSuccessListener {
+                                Toast.makeText(context, "Transaksi penjemputan berhasil dibuat!", Toast.LENGTH_LONG).show()
+
+                                etNamaSampah.text.clear()
+                                etJenisKategori.text.clear()
+                                etBeratSampah.text.clear()
+                                etNamaBankSampah.text.clear()
+                                tvTotalHargaEstimasi.text = "Rp. -"
+                                totalHargaKalkulasi = 0
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(context, "Gagal mengirim data: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(context, "Data profil warga tidak ditemukan!", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(context, "Gagal mengirim data: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Gagal mengambil data profil: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
 
