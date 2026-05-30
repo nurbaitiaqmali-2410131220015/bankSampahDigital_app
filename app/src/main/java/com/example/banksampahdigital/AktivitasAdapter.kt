@@ -31,7 +31,7 @@ class AktivitasAdapter(private val listTransaksi: List<TransaksiModel>) :
         holder.tvKeterangan.text = "${data.namaSampah} (${data.beratSampah} kg) - Rp ${data.totalHarga}"
 
         // Logika pewarnaan status teks berdasarkan kondisi di Firestore
-        if (data.status == "selesai") {
+        if (data.status == "Selesai Diangkut") { // <-- Ubah string pengecekan di sini
             holder.tvStatus.text = "Selesai Diangkut"
             holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#2ECC71")) // Warna Hijau
         } else {

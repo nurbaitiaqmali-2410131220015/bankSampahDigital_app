@@ -60,15 +60,7 @@
                     android:textSize="28sp"
                     android:textColor="@android:color/white"
                     android:layout_marginTop="4dp"/>
-
-                <TextView
-                    android:id="@+id/tvTotalPoin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Setara dengan: 0 Poin"
-                    android:textColor="#E0F2E1"
-                    android:textSize="12sp"
-                    android:layout_marginTop="8dp"/>
+                
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
