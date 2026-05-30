@@ -19,12 +19,14 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tvRiwayatAlamat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Alamat"
                 android:textStyle="bold"
                 android:textColor="#000000"/>
             <TextView
+                android:id="@+id/tvRiwayatKeterangan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Keterangan" />
@@ -43,6 +45,7 @@
                 android:textStyle="bold"
                 android:textColor="#000000"/>
             <TextView
+                android:id="@+id/tvRiwayatStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dikirim" />
