@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="#F8F9FA">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -30,7 +31,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:text="Rp 0/kg"
-            android:textColor="@color/primary_green"
+            android:textColor="@color/accent_yellow"
             android:textSize="18sp"
             android:textStyle="bold" />
 

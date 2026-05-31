@@ -2,7 +2,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://tools.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -28,9 +28,10 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Masukkan nama sampah (misal: Botol Plastik)"
+            android:hint="Nama sampah (misal: Botol Plastik)"
             android:paddingLeft="15dp"
             android:inputType="text"
+            android:textColor="@color/black"
             android:importantForAutofill="no" />
 
         <EditText
@@ -39,9 +40,10 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Masukkan jenis sampah (misal: Anorganik)"
+            android:hint="Jenis sampah (misal: Anorganik)"
             android:paddingLeft="15dp"
             android:inputType="text"
+            android:textColor="@color/black"
             android:importantForAutofill="no" />
 
         <EditText
@@ -50,23 +52,43 @@
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Masukkan berat sampah (kg)"
+            android:hint="Berat sampah (kg)"
             android:inputType="numberDecimal"
             android:paddingLeft="15dp"
+            android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <!-- Mengubah ID btnHitung menjadi btnTambahItem untuk logika multi-item -->
         <Button
-            android:id="@+id/btnHitung"
+            android:id="@+id/btnTambahItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/accent_yellow"
-            android:text="Hitung Total Harga"
+            android:text="Tambah Sampah"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:paddingHorizontal="30dp" />
+
+        <!-- ➡️ BARU: Tempat list sementara sampah yang diinput muncul -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Daftar Setoran Sementara"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvItemSampahSementara"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_sampah_sementara" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -133,7 +155,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Rp. -"
+                            android:text="Rp. 0"
                             android:textStyle="bold"
                             android:textColor="@color/black"
                             android:textSize="18sp"
@@ -141,10 +163,22 @@
                     </LinearLayout>
                 </RelativeLayout>
 
+                <EditText
+                    android:id="@+id/etAlamatJemput"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@android:drawable/editbox_background"
+                    android:hint="Alamat Lengkap"
+                    android:paddingLeft="15dp"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:importantForAutofill="no" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
@@ -153,11 +187,11 @@
                         android:layout_width="0dp"
                         android:layout_height="45dp"
                         android:layout_weight="1.4"
-                        android:background="#EFEFEF"
-                        android:hint="Nama Bank Sampah Tujuan"
+                        android:hint="Bank Sampah Tujuan"
                         android:textSize="12sp"
                         android:paddingLeft="12dp"
                         android:inputType="text"
+                        android:textColor="@color/black"
                         android:importantForAutofill="no" />
 
                     <Button

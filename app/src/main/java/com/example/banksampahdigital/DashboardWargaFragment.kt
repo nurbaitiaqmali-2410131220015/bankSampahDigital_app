@@ -65,6 +65,7 @@ class DashboardWargaFragment : Fragment() {
 
                         for (document in snapshots) {
                             val transaksi = document.toObject(TransaksiModel::class.java)
+                            transaksi.idTransaksi = document.id // 👈 KUNCI UTAMA: Ambil ID unik dokumen Firestore
                             listTransaksi.add(transaksi)
 
                             // Hitung saldo khusus transaksi yang "Selesai Diangkut"

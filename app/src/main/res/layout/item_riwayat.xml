@@ -8,48 +8,54 @@
     android:layout_marginHorizontal="4dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
-
     <RelativeLayout
-        android:layout_width="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <LinearLayout
+        android:id="@+id/layoutStatusKanan" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="15dp">
-
-        <LinearLayout
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="end"
+        android:orientation="vertical">
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/tvRiwayatAlamat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Alamat"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
-            <TextView
-                android:id="@+id/tvRiwayatKeterangan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Keterangan" />
-        </LinearLayout>
+            android:text="Status:"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+        <TextView
+        android:id="@+id/tvRiwayatStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dikirim"
+        android:textStyle="bold" />
+    </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/layoutStatusKanan" android:layout_marginEnd="15dp"> <TextView
+        android:id="@+id/tvRiwayatAlamat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alamat"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:textSize="15sp"/>
+
+        <TextView
+            android:id="@+id/tvRiwayatKeterangan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:gravity="end"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status:"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
-            <TextView
-                android:id="@+id/tvRiwayatStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dikirim" />
-        </LinearLayout>
+            android:layout_marginTop="4dp"
+            android:textColor="#BBBBBB"
+            android:text="Keterangan"
+            android:textSize="13sp" />
+    </LinearLayout>
 
-    </RelativeLayout>
+</RelativeLayout>
 </androidx.cardview.widget.CardView>
