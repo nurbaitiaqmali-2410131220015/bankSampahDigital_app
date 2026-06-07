@@ -1,11 +1,17 @@
 package com.example.banksampahdigital
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -143,6 +149,13 @@ class DetailPenjemputanActivity : AppCompatActivity() {
                 null
             }.addOnSuccessListener {
                 Toast.makeText(this, "Tugas sukses! Rp $totalHargaKolektif ditransfer ke warga.", Toast.LENGTH_LONG).show()
+
+                // 🔥 MEMANGGIL NOTIFIKASI LOKAL DI HP KURIR
+                tampilkanNotifikasiKurir(
+                    "Tugas Selesai!",
+                    "Data timbangan berhasil dikirim dan saldo warga telah diperbarui."
+                )
+
                 finish()
             }.addOnFailureListener { e ->
                 btnSelesaiAngkut.isEnabled = true
@@ -155,5 +168,42 @@ class DetailPenjemputanActivity : AppCompatActivity() {
         itemTimbanganAdapter.notifyDataSetChanged()
         totalHargaKolektif = listTimbanganSementara.sumOf { it.totalHargaItem }
         tvTotal.text = "Rp $totalHargaKolektif"
+    }
+
+    // ==================== LOGIKA FUNGSI NOTIFIKASI LOKAL KURIR ====================
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Notifikasi Pengangkut"
+            val descriptionText = "Channel untuk status penyelesaian tugas kurir"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("PENGANGKUT_CHANNEL", name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun tampilkanNotifikasiKurir(judul: String, pesan: String) {
+        // Daftarkan channel ke sistem Android
+        createNotificationChannel()
+
+        val builder = NotificationCompat.Builder(this, "PENGANGKUT_CHANNEL")
+            .setSmallIcon(android.R.drawable.ic_dialog_info) // Icon sistem bawaan sementara
+            .setContentTitle(judul)
+            .setContentText(pesan)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+
+        try {
+            with(NotificationManagerCompat.from(this)) {
+                // Generate ID acak unik berbasis timestamp agar tidak saling menimpa
+                notify(System.currentTimeMillis().toInt(), builder.build())
+            }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
     }
 }

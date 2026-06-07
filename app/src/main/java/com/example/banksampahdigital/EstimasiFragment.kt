@@ -1,6 +1,9 @@
 package com.example.banksampahdigital
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -66,10 +71,10 @@ class EstimasiFragment : Fragment() {
                             "namaWarga" to namaLengkapWarga,
                             "alamatWarga" to alamatManual,
                             "namaSampah" to namaSampah,
-                            "jenisSampah" to jenisInput.lowercase(), // Dipaksa lowercase untuk ID dokumen database
-                            "beratSampah" to 0.0,  // Diisi oleh pengangkut nanti
-                            "totalHarga" to 0,     // Dikalkulasi oleh pengangkut nanti
-                            "poin" to 0,           // Dikalkulasi oleh pengangkut nanti
+                            "jenisSampah" to jenisInput.lowercase(),
+                            "beratSampah" to 0.0,
+                            "totalHarga" to 0,
+                            "poin" to 0,
                             "bankSampahTujuan" to namaBank,
                             "status" to "Menunggu Kurir",
                             "tanggal" to tanggalHariIni
@@ -78,6 +83,12 @@ class EstimasiFragment : Fragment() {
                         db.collection("transaksi").add(transaksiMap)
                             .addOnSuccessListener {
                                 Toast.makeText(context, "Request penjemputan berhasil dikirim ke Kurir!", Toast.LENGTH_LONG).show()
+
+                                // 🔥 MEMANGGIL NOTIFIKASI LOKAL SAAT BERHASIL
+                                tampilkanNotifikasiLokal(
+                                    "Penjemputan Diajukan!",
+                                    "Kurir akan segera datang ke lokasi Anda. Mohon siapkan sampah Anda."
+                                )
 
                                 // Bersihkan Form
                                 etNamaSampah.text.clear()
@@ -98,5 +109,42 @@ class EstimasiFragment : Fragment() {
         }
 
         return view
+    }
+
+    // ==================== LOGIKA FUNGSI NOTIFIKASI LOKAL ====================
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Notifikasi Bank Sampah"
+            val descriptionText = "Channel untuk status penjemputan sampah"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("BANK_SAMPAH_CHANNEL", name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun tampilkanNotifikasiLokal(judul: String, pesan: String) {
+        // Daftarkan channel ke sistem Android
+        createNotificationChannel()
+
+        val builder = NotificationCompat.Builder(requireContext(), "BANK_SAMPAH_CHANNEL")
+            .setSmallIcon(android.R.drawable.ic_dialog_info) // Icon sistem bawaan sementara
+            .setContentTitle(judul)
+            .setContentText(pesan)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+
+        try {
+            with(NotificationManagerCompat.from(requireContext())) {
+                // Generate ID acak unik berbasis timestamp agar notifikasi tidak saling menimpa
+                notify(System.currentTimeMillis().toInt(), builder.build())
+            }
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
     }
 }
