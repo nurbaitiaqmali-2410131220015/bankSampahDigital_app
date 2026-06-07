@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +25,9 @@ class DashboardWargaFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.activity_dashboard_warga, container, false)
 
-        // Inisialisasi komponen UI (tvTotalPoin dihapus)
         val tvSalamWarga = view.findViewById<TextView>(R.id.tvSalamWarga)
         val tvTotalSaldo = view.findViewById<TextView>(R.id.tvTotalSaldo)
 
-        // Hubungkan RecyclerView
         rvAktivitasTerakhir = view.findViewById(R.id.rvAktivitasTerakhir)
         rvAktivitasTerakhir.layoutManager = LinearLayoutManager(context)
         aktivitasAdapter = AktivitasAdapter(listTransaksi)
@@ -41,44 +38,38 @@ class DashboardWargaFragment : Fragment() {
 
         if (!emailLogin.isNullOrEmpty()) {
 
-            // 1. Ambil Nama untuk Sapaan Profil
-            db.collection("users").document(emailLogin).get()
-                .addOnSuccessListener { document ->
-                    if (document.exists()) {
+            // 1. Ambil Nama & Saldo secara Real-Time dari Koleksi "users"
+            db.collection("users").document(emailLogin)
+                .addSnapshotListener { document, error ->
+                    if (error != null) return@addSnapshotListener
+
+                    if (document != null && document.exists()) {
                         val namaWarga = document.getString("nama") ?: "Warga"
+                        // Mengambil nilai saldo riil dari database user, bukan hasil penjumlahan transaksi
+                        val saldoRiil = document.getLong("saldo") ?: 0L
+
                         tvSalamWarga.text = "Halo, $namaWarga!"
+                        tvTotalSaldo.text = "Rp $saldoRiil"
                     }
                 }
 
-            // 2. Pasang Listener Snapshot untuk Real-Time Update Saldo & List
+            // 2. Pasang Listener Snapshot untuk Mengisi List Riwayat Transaksi Saja
             db.collection("transaksi")
                 .whereEqualTo("emailWarga", emailLogin)
                 .addSnapshotListener { snapshots, error ->
-                    if (error != null) {
-                        return@addSnapshotListener
-                    }
-
-                    var totalSaldoWarga = 0
+                    if (error != null) return@addSnapshotListener
 
                     if (snapshots != null) {
                         listTransaksi.clear()
 
                         for (document in snapshots) {
                             val transaksi = document.toObject(TransaksiModel::class.java)
-                            transaksi.idTransaksi = document.id // 👈 KUNCI UTAMA: Ambil ID unik dokumen Firestore
+                            transaksi.idTransaksi = document.id
                             listTransaksi.add(transaksi)
-
-                            // Hitung saldo khusus transaksi yang "Selesai Diangkut"
-                            if (transaksi.status == "Selesai Diangkut") {
-                                totalSaldoWarga += transaksi.totalHarga
-                            }
                         }
                     }
 
-                    // Tampilkan total saldo saja ke layar HP
-                    tvTotalSaldo.text = "Rp $totalSaldoWarga"
-
-                    // Beritahu adapter untuk refresh tampilan halaman
+                    // Hanya merefresh tampilan list di RecyclerView
                     aktivitasAdapter.notifyDataSetChanged()
                 }
         }

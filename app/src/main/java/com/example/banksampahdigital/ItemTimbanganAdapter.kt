@@ -7,11 +7,11 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ItemSampahAdapter(
-    private val listItem: ArrayList<ItemSampah>,
+class ItemTimbanganAdapter(
+    private val listItem: ArrayList<ItemTimbangan>,
     private val onEditClick: (Int) -> Unit,
     private val onDeleteClick: (Int) -> Unit
-) : RecyclerView.Adapter<ItemSampahAdapter.ItemViewHolder>() {
+) : RecyclerView.Adapter<ItemTimbanganAdapter.ItemViewHolder>() {
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvInfo: TextView = view.findViewById(R.id.tvInfoItemSampah)
@@ -20,7 +20,7 @@ class ItemSampahAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_sampah_sementara, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_timbangan_sementara, parent, false)
         return ItemViewHolder(view)
     }
 

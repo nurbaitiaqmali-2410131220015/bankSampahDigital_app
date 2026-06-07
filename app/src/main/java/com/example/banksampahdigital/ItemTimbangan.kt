@@ -1,6 +1,6 @@
 package com.example.banksampahdigital
 
-data class ItemSampah(
+data class ItemTimbangan(
     var nama: String,
     var jenis: String,
     var berat: Double,

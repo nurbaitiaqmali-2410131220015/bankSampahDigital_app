@@ -2,7 +2,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://tools.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -17,200 +16,97 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Input Sampah"
+            android:text="Form Pengajuan Setor Sampah"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="18sp"
+            android:layout_marginBottom="15dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Sampah"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/etNamaSampah"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="14dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Nama sampah (misal: Botol Plastik)"
+            android:hint="misal: Kardus dan Botol Plastik"
             android:paddingLeft="15dp"
             android:inputType="text"
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kategori / Jenis Sampah"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
         <EditText
             android:id="@+id/etJenisKategori"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="14dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Jenis sampah (misal: Anorganik)"
+            android:hint="Ketik satu dokumen id: anorganik / kertas / organik"
             android:paddingLeft="15dp"
             android:inputType="text"
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alamat Penjemputan"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
         <EditText
-            android:id="@+id/etBeratSampah"
+            android:id="@+id/etAlamatJemput"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="14dp"
             android:background="@android:drawable/editbox_background"
-            android:hint="Berat sampah (kg)"
-            android:inputType="numberDecimal"
+            android:hint="Masukkan alamat lengkap rumah Anda"
             android:paddingLeft="15dp"
+            android:inputType="textPostalAddress"
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
-        <!-- Mengubah ID btnHitung menjadi btnTambahItem untuk logika multi-item -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bank Sampah Tujuan"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/etNamaBankSampah"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp"
+            android:background="@android:drawable/editbox_background"
+            android:hint="misal: Bank Sampah Induk"
+            android:paddingLeft="15dp"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:importantForAutofill="no" />
+
         <Button
-            android:id="@+id/btnTambahItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+            android:id="@+id/btnSetorJemput"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:backgroundTint="@color/accent_yellow"
-            android:text="Tambah Sampah"
+            android:text="Panggil Kurir Penjemputan"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:textAllCaps="false"
-            android:paddingHorizontal="30dp" />
-
-        <!-- ➡️ BARU: Tempat list sementara sampah yang diinput muncul -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Daftar Setoran Sementara"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvItemSampahSementara"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:nestedScrollingEnabled="false"
-            tools:listitem="@layout/item_sampah_sementara" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="Hasil Kalkulasi"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@android:color/white">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Komoditas:"
-                            android:textColor="#7F8C8D"
-                            android:textSize="14sp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Status Estimasi:"
-                            android:textColor="#7F8C8D"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:gravity="end"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Pendapatan"
-                            android:textSize="12sp"
-                            android:textColor="#555555" />
-                        <TextView
-                            android:id="@+id/tvTotalHargaEstimasi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:text="Rp. 0"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            tools:text="Rp. 15.000" />
-                    </LinearLayout>
-                </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/etAlamatJemput"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@android:drawable/editbox_background"
-                    android:hint="Alamat Lengkap"
-                    android:paddingLeft="15dp"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:importantForAutofill="no" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <EditText
-                        android:id="@+id/etNamaBankSampah"
-                        android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_weight="1.4"
-                        android:hint="Bank Sampah Tujuan"
-                        android:textSize="12sp"
-                        android:paddingLeft="12dp"
-                        android:inputType="text"
-                        android:textColor="@color/black"
-                        android:importantForAutofill="no" />
-
-                    <Button
-                        android:id="@+id/btnSetorJemput"
-                        android:layout_width="0dp"
-                        android:layout_height="45dp"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:backgroundTint="@color/accent_yellow"
-                        android:text="Setor Dan Jemput"
-                        android:textSize="11sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold"
-                        android:textAllCaps="false"
-                        android:padding="0dp"/>
-                </LinearLayout>
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            android:textAllCaps="false"/>
 
     </LinearLayout>
 </ScrollView>

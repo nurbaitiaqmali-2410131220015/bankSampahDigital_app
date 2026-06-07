@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -15,111 +16,133 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Detail Penjemputan"
+            android:text="Detail Penjemputan &amp; Timbangan"
             android:textStyle="bold"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textColor="@android:color/black"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="16dp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="3dp"
-            android:layout_marginBottom="20dp">
-
+            android:layout_marginBottom="16dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-
                 <TextView
                     android:id="@+id/tvNamaWarga"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Warga: -"
                     android:textStyle="bold"
-                    android:textSize="16sp"
                     android:textColor="@android:color/black"/>
-
                 <TextView
                     android:id="@+id/tvAlamat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Alamat Rumah"
-                    android:textSize="14sp"
                     android:textColor="#555555"
-                    android:layout_marginTop="8dp"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E0E0E0"
-                    android:layout_marginVertical="12dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Daftar Setoran Sampah:"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
-                    android:textColor="#7F8C8D"/>
-
+                    android:layout_marginTop="4dp"/>
                 <TextView
                     android:id="@+id/tvDetailSampah"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Detail jenis sampah"
-                    android:textSize="14sp"
-                    android:textColor="#2C3E50"
+                    android:text="Catatan Warga: -"
                     android:textStyle="italic"
-                    android:layout_marginTop="4dp"/>
+                    android:layout_marginTop="8dp"
+                    android:textColor="#2C3E50"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Input Hasil Timbangan Per Jenis"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etKurirJenisSampah"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="50dp"
+            android:background="@android:drawable/editbox_background"
+            android:hint="Jenis (Ketik ID: organik / anorganik / logam)"
+            android:paddingLeft="15dp"
+            android:inputType="text"
+            android:textColor="@android:color/black"/>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/etKurirBeratSampah"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@android:drawable/editbox_background"
+            android:hint="Berat Sampah (kg)"
+            android:inputType="numberDecimal"
+            android:paddingLeft="15dp"
+            android:textColor="@android:color/black"/>
 
-                <ImageView
-                    android:id="@+id/ivMapsDummy"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/peta" />
+        <Button
+            android:id="@+id/btnKurirTambahItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:text="Tambah ke Daftar"
+            android:backgroundTint="#3498DB"
+            android:textColor="@android:color/white"/>
 
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:src="@android:drawable/ic_menu_mylocation"
-                    app:tint="#E74C3C" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Daftar Timbangan Sementara:"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lokasi Penjemputan"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:background="#80000000"
-                    android:textColor="@android:color/white"
-                    android:paddingHorizontal="8dp"
-                    android:textSize="12sp"/>
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTimbanganKurir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:nestedScrollingEnabled="false"
+            tools:listitem="@layout/item_timbangan_sementara"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:padding="10dp"
+            android:background="#EAFAF1">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total Saldo Dihasilkan:"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"/>
+            <TextView
+                android:id="@+id/tvKurirTotalHarga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rp 0"
+                android:textStyle="bold"
+                android:textColor="#27AE60"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
         <Button
             android:id="@+id/btnSelesaiAngkut"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="SELESAI ANGKUT SAMPAH"
+            android:layout_marginTop="20dp"
+            android:text="SELESAI &amp; TRANSFER SALDO"
             android:backgroundTint="#2ECC71"
             android:textColor="@android:color/white"
             android:textStyle="bold"
