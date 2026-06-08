@@ -21,18 +21,21 @@ class DashboardPengangkutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard_pengangkut)
 
         // =================================================================
-        // BAGIAN BARU: LOGIKA KLIK TOMBOL LOGOUT PETUGAS (SUDAH DIPERBAIKI)
+        // BAGIAN PERBAIKAN: LOGIKA TOMBOL LOGOUT AMAN DARI AUTO-LOGOUT PETUGAS
         // =================================================================
         val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
         btnLogout.setOnClickListener {
-            // Memanggil Class LoginActivity Kotlin dengan benar
-            val intent = Intent(this, LoginActivity::class.java)
+            // Isolasi aksi agar benar-benar hanya berjalan saat klik manual terjadi
+            this.let { activityContext ->
+                // Memanggil Class LoginActivity Kotlin dengan benar
+                val intent = Intent(activityContext, LoginActivity::class.java)
 
-            // Flag untuk menghapus riwayat halaman agar tidak bisa di-back
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                // Flag untuk menghapus riwayat halaman belakang (hanya dipicu saat klik)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-            startActivity(intent)
-            finish() // Menutup halaman dashboard pengangkut
+                startActivity(intent)
+                activityContext.finish() // Menutup halaman dashboard pengangkut dengan aman
+            }
         }
         // =================================================================
 

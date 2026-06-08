@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton // BARU: Ditambahkan untuk komponen ImageButton
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,24 +31,27 @@ class DashboardWargaFragment : Fragment() {
         val tvTotalSaldo = view.findViewById<TextView>(R.id.tvTotalSaldo)
 
         // =================================================================
-        // BAGIAN BARU: LOGIKA KLIK TOMBOL LOGOUT WARGA (FRAGMENT VERSION)
+        // BAGIAN PERBAIKAN: LOGIKA TOMBOL LOGOUT AMAN DARI AUTO-LOGOUT
         // =================================================================
         val btnLogout = view.findViewById<ImageButton>(R.id.btnLogout)
         btnLogout.setOnClickListener {
-            // 1. Hapus session email login dari SharedPreferences agar tidak otomatis masuk lagi
-            val sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-            sharedPreferences.edit().clear().apply()
+            // Memastikan fragment masih menempel pada Activity sebelum memicu perpindahan haman
+            activity?.let { activityContext ->
+                // 1. Hapus session email login dari SharedPreferences
+                val sharedPreferences = activityContext.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                sharedPreferences.edit().clear().apply()
 
-            // 2. Berpindah dari Fragment kembali ke LoginActivity
-            val intent = Intent(requireActivity(), LoginActivity::class.java)
+                // 2. Berpindah dari MainActivity kembali ke LoginActivity
+                val intent = Intent(activityContext, LoginActivity::class.java)
 
-            // Flag untuk menghapus riwayat halaman/stack activity sebelumnya
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                // Flag ini hanya dipicu saat klik manual untuk membersihkan tumpukan halaman belakang
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-            startActivity(intent)
+                startActivity(intent)
 
-            // 3. Tutup Activity utama yang menampung fragment ini
-            requireActivity().finish()
+                // 3. Tutup Activity utama (MainActivity)
+                activityContext.finish()
+            }
         }
         // =================================================================
 
@@ -69,7 +72,6 @@ class DashboardWargaFragment : Fragment() {
 
                     if (document != null && document.exists()) {
                         val namaWarga = document.getString("nama") ?: "Warga"
-                        // Mengambil nilai saldo riil dari database user, bukan hasil penjumlahan transaksi
                         val saldoRiil = document.getLong("saldo") ?: 0L
 
                         tvSalamWarga.text = "Halo, $namaWarga!"
@@ -93,7 +95,6 @@ class DashboardWargaFragment : Fragment() {
                         }
                     }
 
-                    // Hanya merefresh tampilan list di RecyclerView
                     aktivitasAdapter.notifyDataSetChanged()
                 }
         }
