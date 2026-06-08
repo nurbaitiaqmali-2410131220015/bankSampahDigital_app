@@ -18,6 +18,29 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // =================================================================
+        // BAGIAN BARU: AUTO-LOGIN CHECKER (ANTI MENTAL KE LOGIN SAAT TOMBOL BACK)
+        // =================================================================
+        val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val savedEmail = sharedPreferences.getString("EMAIL_USER", "")
+
+        // Jika data email di session HP masih ada (belum logout), langsung lempar ke Dashboard masing-masing
+        if (!savedEmail.isNullOrEmpty()) {
+            db.collection("users").document(savedEmail).get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val role = document.getString("role")
+                        if (role == "pengangkut") {
+                            startActivity(Intent(this, DashboardPengangkutActivity::class.java))
+                        } else {
+                            startActivity(Intent(this, MainActivity::class.java))
+                        }
+                        finish() // Hancurkan LoginActivity agar tidak bisa di-back
+                    }
+                }
+        }
+        // =================================================================
+
         val etEmail = findViewById<EditText>(R.id.etEmail)
         val etPassword = findViewById<EditText>(R.id.etPassword)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
@@ -46,8 +69,8 @@ class LoginActivity : AppCompatActivity() {
                             // =======================================================
                             // BAGIAN BARU: MENYIMPAN EMAIL USER YANG LOGIN KE SESI HP
                             // =======================================================
-                            val sharedPreferences = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
-                            val editor = sharedPreferences.edit()
+                            val sharedPreferencesLayout = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                            val editor = sharedPreferencesLayout.edit()
                             editor.putString("EMAIL_USER", email) // Menyimpan email untuk dipakai di halaman Dashboard
                             editor.apply()
                             // =======================================================
