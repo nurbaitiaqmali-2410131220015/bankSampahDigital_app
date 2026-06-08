@@ -1,8 +1,9 @@
 package com.example.banksampahdigital
 
+import android.content.Context // BARU: Pastikan ini di-import untuk SharedPreferences
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton // Pastikan ini ada agar ImageButton tidak merah
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,16 +22,20 @@ class DashboardPengangkutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard_pengangkut)
 
         // =================================================================
-        // BAGIAN PERBAIKAN: LOGIKA TOMBOL LOGOUT AMAN DARI AUTO-LOGOUT PETUGAS
+        // BAGIAN PERBAIKAN: LOGIKA TOMBOL LOGOUT PETUGAS + CLEAR SESSION
         // =================================================================
         val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
         btnLogout.setOnClickListener {
-            // Isolasi aksi agar benar-benar hanya berjalan saat klik manual terjadi
             this.let { activityContext ->
-                // Memanggil Class LoginActivity Kotlin dengan benar
+
+                // 1. WAJIB: Hapus session email login dari SharedPreferences agar tidak auto-login kembali
+                val sharedPreferences = activityContext.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                sharedPreferences.edit().clear().apply()
+
+                // 2. Berpindah dari Dashboard kembali ke LoginActivity
                 val intent = Intent(activityContext, LoginActivity::class.java)
 
-                // Flag untuk menghapus riwayat halaman belakang (hanya dipicu saat klik)
+                // Flag untuk menghapus riwayat halaman belakang
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 
                 startActivity(intent)
