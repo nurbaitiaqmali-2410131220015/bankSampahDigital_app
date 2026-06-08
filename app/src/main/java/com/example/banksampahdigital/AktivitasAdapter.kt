@@ -28,11 +28,26 @@ class AktivitasAdapter(private val listTransaksi: List<TransaksiModel>) :
         val context = holder.itemView.context
         val db = FirebaseFirestore.getInstance()
 
-        // Mengisi data dari Firestore ke dalam desain kartu riwayat warga
-        holder.tvAlamat.text = data.bankSampahTujuan
-        holder.tvKeterangan.text = "${data.namaSampah} (${data.beratSampah} kg) - Rp ${data.totalHarga}"
+        // 1. Mengubah nama bank menjadi huruf besar di awal kata (Title Case) secara otomatis
+        val namaBankMentah = data.bankSampahTujuan ?: ""
+        val namaBankCapitalized = namaBankMentah.split(" ")
+            .filter { it.isNotEmpty() }
+            .joinToString(" ") { kata ->
+                kata.lowercase().replaceFirstChar { it.uppercase() }
+            }
+        holder.tvAlamat.text = namaBankCapitalized
 
-        // Logika pewarnaan status teks berdasarkan kondisi di Firestore
+        // 2. Mengubah nama jenis sampah menjadi huruf besar di awal kata (Contoh: botol -> Botol)
+        val jenisSampahMentah = data.namaSampah ?: ""
+        val jenisSampahCapitalized = jenisSampahMentah.lowercase().replaceFirstChar { it.uppercase() }
+
+        // 3. Mengubah format angka harga menjadi format Rupiah ber-titik ribuan
+        val formatRupiah = java.text.NumberFormat.getNumberInstance(java.util.Locale("in", "ID")).format(data.totalHarga)
+
+        // Memasukkan gabungan teks rapi ke TextView Keterangan
+        holder.tvKeterangan.text = "$jenisSampahCapitalized (${data.beratSampah} kg) • Rp $formatRupiah"
+
+        // 4. Logika pewarnaan status teks berdasarkan kondisi di Firestore
         if (data.status == "Selesai Diangkut") {
             holder.tvStatus.text = "Selesai Diangkut"
             holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#2ECC71")) // Warna Hijau
@@ -41,10 +56,9 @@ class AktivitasAdapter(private val listTransaksi: List<TransaksiModel>) :
             holder.tvStatus.setTextColor(android.graphics.Color.parseColor("#F39C12")) // Warna Jingga/Kuning
         }
 
-        // 🛠️ LOGIKA BARU: Tekan lama item untuk membatalkan atau menghapus transaksi
+        // 5. Logika Tekan Lama Item (Untuk membatalkan atau menghapus transaksi)
         holder.itemView.setOnLongClickListener {
             if (data.status == "Menunggu Kurir") {
-                // Tampilkan dialog konfirmasi pembatalan setoran sampah
                 AlertDialog.Builder(context)
                     .setTitle("Batalkan Setoran?")
                     .setMessage("Apakah Anda ingin membatalkan transaksi penjemputan sampah ini?")
@@ -61,7 +75,6 @@ class AktivitasAdapter(private val listTransaksi: List<TransaksiModel>) :
                     .setNegativeButton("Kembali", null)
                     .show()
             } else if (data.status == "Selesai Diangkut") {
-                // Tampilkan dialog konfirmasi hapus riwayat selesai diangkut
                 AlertDialog.Builder(context)
                     .setTitle("Hapus Riwayat?")
                     .setMessage("Hapus riwayat ini dari daftar aktivitas Anda? (Tidak akan mengurangi total saldo tabungan)")
