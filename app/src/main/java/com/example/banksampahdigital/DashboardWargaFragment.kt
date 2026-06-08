@@ -1,10 +1,12 @@
 package com.example.banksampahdigital
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton // BARU: Ditambahkan untuk komponen ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +29,28 @@ class DashboardWargaFragment : Fragment() {
 
         val tvSalamWarga = view.findViewById<TextView>(R.id.tvSalamWarga)
         val tvTotalSaldo = view.findViewById<TextView>(R.id.tvTotalSaldo)
+
+        // =================================================================
+        // BAGIAN BARU: LOGIKA KLIK TOMBOL LOGOUT WARGA (FRAGMENT VERSION)
+        // =================================================================
+        val btnLogout = view.findViewById<ImageButton>(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            // 1. Hapus session email login dari SharedPreferences agar tidak otomatis masuk lagi
+            val sharedPreferences = requireContext().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+            sharedPreferences.edit().clear().apply()
+
+            // 2. Berpindah dari Fragment kembali ke LoginActivity
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
+
+            // Flag untuk menghapus riwayat halaman/stack activity sebelumnya
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+
+            // 3. Tutup Activity utama yang menampung fragment ini
+            requireActivity().finish()
+        }
+        // =================================================================
 
         rvAktivitasTerakhir = view.findViewById(R.id.rvAktivitasTerakhir)
         rvAktivitasTerakhir.layoutManager = LinearLayoutManager(context)

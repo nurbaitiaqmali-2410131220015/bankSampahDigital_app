@@ -2,6 +2,7 @@ package com.example.banksampahdigital
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton // Pastikan ini ada agar ImageButton tidak merah
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,22 @@ class DashboardPengangkutActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard_pengangkut)
+
+        // =================================================================
+        // BAGIAN BARU: LOGIKA KLIK TOMBOL LOGOUT PETUGAS (SUDAH DIPERBAIKI)
+        // =================================================================
+        val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            // Memanggil Class LoginActivity Kotlin dengan benar
+            val intent = Intent(this, LoginActivity::class.java)
+
+            // Flag untuk menghapus riwayat halaman agar tidak bisa di-back
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+            finish() // Menutup halaman dashboard pengangkut
+        }
+        // =================================================================
 
         rvDaftarTugas = findViewById(R.id.rvDaftarTugas)
         rvDaftarTugas.layoutManager = LinearLayoutManager(this)
