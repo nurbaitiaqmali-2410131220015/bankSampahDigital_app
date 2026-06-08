@@ -53,8 +53,16 @@ class DetailEdukasiActivity : AppCompatActivity() {
         db.collection("edukasi").document(idKategori).get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
-                    val hargaFlat = documentSnapshot.getLong("hargaKategori")?.toInt() ?: 0
-                    tvHargaFlatKategori.text = "Rp $hargaFlat/kg"
+                    // 👇 LOGIKA UTAMA: Cek jika kategori adalah organik atau b3
+                    if (idKategori.equals("organik", ignoreCase = true) || idKategori.equals("b3", ignoreCase = true)) {
+                        // Sembunyikan tulisan harga dari layar (tidak memakan ruang)
+                        tvHargaFlatKategori.visibility = android.view.View.GONE
+                    } else {
+                        // Tampilkan harga normal jika kategori ekonomis (anorganik, logam, dll)
+                        tvHargaFlatKategori.visibility = android.view.View.VISIBLE
+                        val hargaFlat = documentSnapshot.getLong("hargaKategori")?.toInt() ?: 0
+                        tvHargaFlatKategori.text = "Rp $hargaFlat/kg"
+                    }
                 }
                 ambilDaftarSampah(idKategori)
             }
@@ -62,7 +70,6 @@ class DetailEdukasiActivity : AppCompatActivity() {
                 Toast.makeText(this, "Gagal memuat harga: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
     private fun ambilDaftarSampah(idKategori: String) {
         db.collection("edukasi").document(idKategori).collection("daftar_sampah")
             .get()
