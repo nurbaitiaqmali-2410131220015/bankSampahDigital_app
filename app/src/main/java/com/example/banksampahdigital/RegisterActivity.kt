@@ -42,6 +42,26 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // --- TAMBAHKAN VALIDASI EMAIL DI SINI ---
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                etEmail.error = "Format email tidak valid"
+                Toast.makeText(this, "Format email tidak valid", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            // ----------------------------------------
+
+            // Validasi tambahan: Memastikan password dan konfirmasi password sama
+            if (password != confirmPassword) {
+                Toast.makeText(this, "Password dan Konfirmasi Password tidak cocok!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Validasi kelengkapan input
+            if (nama.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(this, "Semua kolom wajib diisi!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             // Validasi tambahan: Memastikan password dan konfirmasi password sama
             if (password != confirmPassword) {
                 Toast.makeText(this, "Password dan Konfirmasi Password tidak cocok!", Toast.LENGTH_SHORT).show()
@@ -64,17 +84,38 @@ class RegisterActivity : AppCompatActivity() {
             )
 
             // Menyimpan data ke Cloud Firestore dalam koleksi "users"
-            db.collection("users").document(email).set(userMap)
-                .addOnSuccessListener {
-                    Toast.makeText(this, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
+            // ... setelah validasi email dan password berhasil ...
 
-                    // Otomatis diarahkan kembali ke halaman LoginActivity
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
+// Cek apakah email sudah ada di database
+            db.collection("users").document(email).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        // JIKA EMAIL SUDAH ADA
+                        etEmail.error = "Email sudah terdaftar"
+                        Toast.makeText(this, "Email sudah terdaftar, silakan gunakan email lain atau Login", Toast.LENGTH_SHORT).show()
+                    } else {
+                        // JIKA EMAIL BELUM ADA, BARU SIMPAN DATA
+                        val userMap = hashMapOf(
+                            "nama" to nama,
+                            "email" to email,
+                            "password" to password,
+                            "role" to roleSelected
+                        )
+
+                        db.collection("users").document(email).set(userMap)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Pendaftaran Berhasil!", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, LoginActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(this, "Gagal mendaftar: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    }
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Gagal mendaftar: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Terjadi kesalahan: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
 
