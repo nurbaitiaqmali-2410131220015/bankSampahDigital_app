@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- ScrollView digunakan agar halaman bisa digulir jika isi form lebih panjang dari layar -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,12 +9,14 @@
     android:fillViewport="true"
     android:background="#F8F9FA">
 
+    <!-- LinearLayout utama untuk menyusun seluruh komponen form secara vertikal -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp">
 
+        <!-- Judul halaman form pengajuan setor sampah -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,12 +26,15 @@
             android:textSize="18sp"
             android:layout_marginBottom="15dp"/>
 
+        <!-- Label untuk input nama sampah -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nama Sampah"
             android:textColor="@color/black"
             android:textStyle="bold"/>
+
+        <!-- Input untuk mengisi nama sampah yang ingin disetor -->
         <EditText
             android:id="@+id/etNamaSampah"
             android:layout_width="match_parent"
@@ -41,12 +48,15 @@
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <!-- Label untuk input kategori atau jenis sampah -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Kategori / Jenis Sampah"
             android:textColor="@color/black"
             android:textStyle="bold"/>
+
+        <!-- Input untuk mengisi kategori sampah sesuai ID dokumen di Firestore -->
         <EditText
             android:id="@+id/etJenisKategori"
             android:layout_width="match_parent"
@@ -60,12 +70,15 @@
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <!-- Label untuk input alamat penjemputan -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Alamat Penjemputan"
             android:textColor="@color/black"
             android:textStyle="bold"/>
+
+        <!-- Input untuk mengisi alamat lengkap tempat sampah akan dijemput -->
         <EditText
             android:id="@+id/etAlamatJemput"
             android:layout_width="match_parent"
@@ -79,12 +92,15 @@
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <!-- Label untuk input nama bank sampah tujuan -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bank Sampah Tujuan"
             android:textColor="@color/black"
             android:textStyle="bold"/>
+
+        <!-- Input untuk mengisi nama bank sampah tujuan penjemputan -->
         <EditText
             android:id="@+id/etNamaBankSampah"
             android:layout_width="match_parent"
@@ -98,6 +114,7 @@
             android:textColor="@color/black"
             android:importantForAutofill="no" />
 
+        <!-- Tombol untuk mengirim pengajuan penjemputan sampah ke kurir -->
         <Button
             android:id="@+id/btnSetorJemput"
             android:layout_width="match_parent"

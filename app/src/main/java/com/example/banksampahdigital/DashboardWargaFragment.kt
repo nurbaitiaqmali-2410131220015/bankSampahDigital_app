@@ -30,31 +30,45 @@ class DashboardWargaFragment : Fragment() {
         val tvSalamWarga = view.findViewById<TextView>(R.id.tvSalamWarga)
         val tvTotalSaldo = view.findViewById<TextView>(R.id.tvTotalSaldo)
 
-        // =================================================================
-        // BAGIAN PERBAIKAN: LOGIKA TOMBOL LOGOUT AMAN DARI AUTO-LOGOUT
-        // =================================================================
+        // Menghubungkan tombol logout dari file XML ke Kotlin
         val btnLogout = view.findViewById<ImageButton>(R.id.btnLogout)
+
+        // Menjalankan aksi ketika tombol logout ditekan
         btnLogout.setOnClickListener {
-            // Memastikan fragment masih menempel pada Activity sebelum memicu perpindahan haman
+
+            // Memastikan Fragment masih terhubung dengan Activity
+            // agar tidak terjadi error saat berpindah halaman
             activity?.let { activityContext ->
-                // 1. Hapus session email login dari SharedPreferences
-                val sharedPreferences = activityContext.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+
+                // Mengambil SharedPreferences yang digunakan untuk menyimpan sesi login
+                val sharedPreferences = activityContext.getSharedPreferences(
+                    "UserSession",
+                    Context.MODE_PRIVATE
+                )
+
+                // Menghapus seluruh data sesi login yang tersimpan
+                // sehingga pengguna harus login kembali
                 sharedPreferences.edit().clear().apply()
 
-                // 2. Berpindah dari MainActivity kembali ke LoginActivity
-                val intent = Intent(activityContext, LoginActivity::class.java)
+                // Membuat Intent untuk berpindah ke halaman Login
+                val intent = Intent(
+                    activityContext,
+                    LoginActivity::class.java
+                )
 
-                // Flag ini hanya dipicu saat klik manual untuk membersihkan tumpukan halaman belakang
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                // Membersihkan seluruh riwayat halaman sebelumnya
+                // sehingga tombol Back tidak bisa kembali ke Dashboard
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
 
+                // Menjalankan perpindahan ke LoginActivity
                 startActivity(intent)
 
-                // 3. Tutup Activity utama (MainActivity)
+                // Menutup MainActivity agar sesi benar-benar berakhir
                 activityContext.finish()
             }
         }
-        // =================================================================
-
         rvAktivitasTerakhir = view.findViewById(R.id.rvAktivitasTerakhir)
         rvAktivitasTerakhir.layoutManager = LinearLayoutManager(context)
         aktivitasAdapter = AktivitasAdapter(listTransaksi)

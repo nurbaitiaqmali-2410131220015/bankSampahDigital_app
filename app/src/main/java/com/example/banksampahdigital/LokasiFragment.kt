@@ -37,15 +37,15 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         // Hubungkan ke fragment_lokasi.xml
         val view = inflater.inflate(R.layout.fragment_lokasi, container, false)
-
+        // Mengaktifkan layanan lokasi dari GPS
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         db = FirebaseFirestore.getInstance()
 
-        // Memanggil fragment peta agar muncul di UI
+        // Menghubungkan komponen Google Maps dari layout XML
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(this)
 
-        // Menghubungkan tombol lacak dari layout kamu
+        // Menghubungkan tombol lacak dari layout
         val btnLacak = view.findViewById<Button>(R.id.btnLacak)
         btnLacak.setOnClickListener {
             mulaiPelacakanLokasi()
@@ -57,37 +57,30 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // TAMBAHAN: Mengubah jenis peta menjadi tipe Satelit/Hybrid agar mirip mockup
         mMap?.mapType = GoogleMap.MAP_TYPE_HYBRID
 
-        // Fokus awal kamera mengarah ke daerah Banjarmasin
         val posisiBanjarmasin = LatLng(-3.316694, 114.590111)
         mMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(posisiBanjarmasin, 12.5f))
     }
 
     private fun mulaiPelacakanLokasi() {
-        // Memeriksa izin GPS HP pengguna
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED) {
 
             mMap?.isMyLocationEnabled = true
 
-            // Mengambil titik koordinat GPS dari HP
             fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     val koordinatSaya = LatLng(location.latitude, location.longitude)
-
-                    mMap?.clear() // Bersihkan peta dari pin lama
+                    mMap?.clear()
                     mMap?.addMarker(MarkerOptions().position(koordinatSaya).title("Lokasi Saya"))
                     mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(koordinatSaya, 14f))
 
-                    // PROSES GEOCODER: Mengubah koordinat GPS menjadi nama Kota/Kabupaten (100% Gratis)
                     val geocoder = Geocoder(requireContext(), Locale.getDefault())
                     try {
                         val listAlamat = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         if (!listAlamat.isNullOrEmpty()) {
                             val namaKotaUser = listAlamat[0].locality ?: listAlamat[0].subAdminArea ?: ""
-
                             if (namaKotaUser.isNotEmpty()) {
                                 Toast.makeText(requireContext(), "Mencari Bank Sampah di $namaKotaUser...", Toast.LENGTH_SHORT).show()
                                 // Ambil data bank sampah yang kotanya sama di Firestore
@@ -96,7 +89,6 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        // Backup aman jika geocoder sedang offline: ambil semua data bank sampah
                         ambilBankSampahTerdekat("")
                     }
                 } else {
@@ -115,12 +107,10 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
 
         fusedLocationClient.lastLocation.addOnSuccessListener { userLocation: Location? ->
             if (userLocation == null) return@addOnSuccessListener
-
             val userLat = userLocation.latitude
             val userLng = userLocation.longitude
 
             try {
-                // 1. Membaca file JSON dari folder assets lokal
                 val inputStream = activity?.assets?.open("bank_sampah.json")
                 val size = inputStream?.available() ?: 0
                 val buffer = ByteArray(size)
@@ -139,7 +129,6 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
                 var adaDataDekat = false
                 val RADIUS_MAKSIMAL_KM = 10.0 // Menyaring bank sampah dalam radius maksimal 10 KM
 
-                // 2. Loop otomatis membaca ke-21 data bank sampah yang kamu buat tadi
                 for (i in 0 until jsonArray.length()) {
                     val obj = jsonArray.getJSONObject(i)
                     val nama = obj.getString("nama")
@@ -147,14 +136,12 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
                     val lat = obj.getDouble("latitude")
                     val lng = obj.getDouble("longitude")
 
-                    // 3. Mengukur jarak antara titik GPS user dengan masing-masing Bank Sampah
                     val lokasiBank = Location("").apply {
                         latitude = lat
                         longitude = lng
                     }
                     val jarakKeBankKm = userLocation.distanceTo(lokasiBank) / 1000
 
-                    // 4. Jika jaraknya dekat (masuk radius 10 KM), langsung tancapkan pin hijau di peta
                     if (jarakKeBankKm <= RADIUS_MAKSIMAL_KM) {
                         adaDataDekat = true
                         val posisiBank = LatLng(lat, lng)
@@ -169,7 +156,6 @@ class LokasiFragment : Fragment(), OnMapReadyCallback {
                         )
                     }
                 }
-
                 if (!adaDataDekat) {
                     Toast.makeText(requireContext(), "Tidak ada Bank Sampah dalam radius $RADIUS_MAKSIMAL_KM KM di sekitar posisi Anda.", Toast.LENGTH_SHORT).show()
                 }

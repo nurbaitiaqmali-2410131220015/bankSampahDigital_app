@@ -20,18 +20,16 @@ class DetailEdukasiActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 2. Gunakan setContentView seperti Activity biasa
+        // Menampilkan layout detail edukasi
         setContentView(R.layout.fragment_detail_edukasi)
-
-        // Inisialisasi Firebase Firestore
         db = FirebaseFirestore.getInstance()
 
-        // Inisialisasi Komponen (Tanpa embel-embel "view.")
+        // Menghubungkan komponen XML ke Kotlin
         tvJudulKategori = findViewById(R.id.tvJudulKategori)
         tvHargaFlatKategori = findViewById(R.id.tvHargaFlatKategori)
         rvSampahEdukasi = findViewById(R.id.rvSampahEdukasi)
 
-        // 3. Mengambil data kiriman dari Intent (bukan arguments lagi)
+        // Mengambil data kategori yang dikirim dari EdukasiFragment melalui Intent
         val idKategori = intent.getStringExtra("EXTRA_ID_KATEGORI") ?: "organik"
         val namaKategori = intent.getStringExtra("EXTRA_NAMA_KATEGORI") ?: "Sampah Organik"
 
@@ -50,12 +48,13 @@ class DetailEdukasiActivity : AppCompatActivity() {
     }
 
     private fun ambilDataKategoriDanDaftarSampah(idKategori: String) {
+        // Mengambil dokumen kategori berdasarkan idKategori
         db.collection("edukasi").document(idKategori).get()
             .addOnSuccessListener { documentSnapshot ->
+                // Kondisi jika dokumen kategori ditemukan di Firestore
                 if (documentSnapshot.exists()) {
-                    // 👇 LOGIKA UTAMA: Cek jika kategori adalah organik atau b3
+                    // Kondisi jika kategori organik atau B3, maka harga disembunyikan
                     if (idKategori.equals("organik", ignoreCase = true) || idKategori.equals("b3", ignoreCase = true)) {
-                        // Sembunyikan tulisan harga dari layar (tidak memakan ruang)
                         tvHargaFlatKategori.visibility = android.view.View.GONE
                     } else {
                         // Tampilkan harga normal jika kategori ekonomis (anorganik, logam, dll)

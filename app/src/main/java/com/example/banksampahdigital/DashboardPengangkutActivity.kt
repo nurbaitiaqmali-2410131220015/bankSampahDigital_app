@@ -21,29 +21,45 @@ class DashboardPengangkutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard_pengangkut)
 
-        // =================================================================
-        // BAGIAN PERBAIKAN: LOGIKA TOMBOL LOGOUT PETUGAS + CLEAR SESSION
-        // =================================================================
+        // Menghubungkan tombol logout dari XML ke kode Kotlin
         val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
+
+        // Menjalankan aksi saat tombol logout ditekan
         btnLogout.setOnClickListener {
+
+            // Mengambil context Activity yang sedang aktif
             this.let { activityContext ->
 
-                // 1. WAJIB: Hapus session email login dari SharedPreferences agar tidak auto-login kembali
-                val sharedPreferences = activityContext.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+                // Mengambil SharedPreferences yang digunakan untuk menyimpan sesi login
+                val sharedPreferences = activityContext.getSharedPreferences(
+                    "UserSession",
+                    Context.MODE_PRIVATE
+                )
+
+                // Menghapus seluruh data sesi login yang tersimpan di perangkat
+                // agar pengguna tidak otomatis login kembali
                 sharedPreferences.edit().clear().apply()
 
-                // 2. Berpindah dari Dashboard kembali ke LoginActivity
-                val intent = Intent(activityContext, LoginActivity::class.java)
+                // Membuat Intent untuk berpindah ke halaman Login
+                val intent = Intent(
+                    activityContext,
+                    LoginActivity::class.java
+                )
 
-                // Flag untuk menghapus riwayat halaman belakang
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                // Menghapus seluruh riwayat halaman sebelumnya
+                // sehingga tombol Back tidak bisa kembali ke Dashboard
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
 
+                // Menjalankan perpindahan ke LoginActivity
                 startActivity(intent)
-                activityContext.finish() // Menutup halaman dashboard pengangkut dengan aman
+
+                // Menutup DashboardPengangkutActivity
+                // agar sesi logout benar-benar selesai
+                activityContext.finish()
             }
         }
-        // =================================================================
-
         rvDaftarTugas = findViewById(R.id.rvDaftarTugas)
         rvDaftarTugas.layoutManager = LinearLayoutManager(this)
         rvDaftarTugas.setHasFixedSize(true)

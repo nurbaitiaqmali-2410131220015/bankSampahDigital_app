@@ -18,6 +18,7 @@ class SampahEdukasiAdapter(private val listSampah: List<SampahEdukasi>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        // Mengubah XML item_sampah_edukasi.xml menjadi objek View Android
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_sampah_edukasi, parent, false)
         return ViewHolder(view)
