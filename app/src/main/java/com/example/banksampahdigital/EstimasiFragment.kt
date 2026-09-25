@@ -37,7 +37,7 @@ class EstimasiFragment : Fragment() {
 
         btnSetorJemput.setOnClickListener {
             val namaSampah = etNamaSampah.text.toString().trim()
-            val jenisInput = etJenisKategori.text.toString().trim()
+              val jenisInput = etJenisKategori.text.toString().trim()
             val alamatManual = etAlamatJemput.text.toString().trim()
             val namaBank = etNamaBankSampah.text.toString().trim()
 
